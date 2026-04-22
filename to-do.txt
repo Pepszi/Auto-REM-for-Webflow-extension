@@ -1,0 +1,11 @@
+To do:
+
+Add exceptions to:
+- CHECK add panel search
+- pages panel search
+- components panel search
+- variables panel search
+- style panel search
+- asset panel search
+- apps panel search
+- color input fields
