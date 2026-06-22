@@ -37,6 +37,11 @@ document.addEventListener('keydown', (event) => {
         return;
     }
 
+    // EXCEPTION 4: Don't run in the Pages panel search (left sidebar).
+    if (target.closest('[data-automation-id="pages-search-input-container"]')) {
+        return;
+    }
+
     const value = target.value.trim();
 
     // Check if it's a pure number

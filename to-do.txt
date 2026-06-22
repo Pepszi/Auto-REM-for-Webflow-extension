@@ -2,7 +2,8 @@ To do:
 
 Add exceptions to:
 - CHECK add panel search
-- pages panel search
+- CHECK pages search in the sidebar
+- pages search in the topbar
 - components panel search
 - variables panel search
 - style panel search
