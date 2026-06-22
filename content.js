@@ -1,6 +1,4 @@
-/**
- * Auto-REM for Webflow Content Script
- */
+// Auto-REM for Webflow Content Script
 
 const NUMBER_REGEX = /^-?\d*\.?\d+$/;
 
@@ -15,19 +13,15 @@ document.addEventListener('keydown', (event) => {
     if (target.tagName !== 'INPUT') return;
 
     // EXCEPTION 1: Don't run in the "Custom properties" section (Style Tab).
-    // Webflow uses data-input-type="declaration-property" and "declaration-value" for these inputs.
     const inputType = target.getAttribute('data-input-type');
     if (inputType === 'declaration-property' || inputType === 'declaration-value') {
         return;
     }
 
-    // EXCEPTION 2: Don't run in the "Settings" or "Interactions" panels (System panels).
-    // This targets the specific tab containers and section bodies found in the right sidebar.
-    const isSystemPanel = target.closest('[data-automation-id="right-sidebar-settings-tab"]') || 
-                          target.closest('[data-automation-id="right-sidebar-interactions-tab"]') ||
-                          target.closest('[data-automation-id="custom-attributes-settings"]');
-    
-    if (isSystemPanel) {
+    // EXCEPTION 2: Don't run in Settings, Interactions, or custom attributes panels.
+    if (target.closest('[data-automation-id="right-sidebar-settings-tab"]') ||
+        target.closest('[data-automation-id="right-sidebar-interactions-tab"]') ||
+        target.closest('[data-automation-id="custom-attributes-settings"]')) {
         return;
     }
 
