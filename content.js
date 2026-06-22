@@ -2,6 +2,56 @@
 
 const NUMBER_REGEX = /^-?\d*\.?\d+$/;
 
+// Allowed values for input name or data-automation-id (both are checked).
+const ALLOWED_STYLE_INPUT_NAMES = [
+    'width',
+    'height',
+    'minWidth',
+    'minHeight',
+    'maxWidth',
+    'maxHeight',
+    'position',
+    'spacing',
+    'sp-columnGap',
+    'sp-rowGap',
+    'sp-DefaultSizing',
+    'sp-MinSizing',
+    'sp-MaxSizing',
+    'fontSize',
+    'lineHeight',
+    'letterSpacing',
+    'textDecorationThickness',
+    'textIndent',
+    'textColumnsGap',
+    'textStrokeWidth',
+    'text-shadow-x',
+    'text-shadow-y',
+    'text-shadow-blur',
+    'borderRadius',
+    'borderWidth',
+    'outlineWidth',
+    'outlineOffset',
+    'box-shadow-x',
+    'box-shadow-y',
+    'box-shadow-blur',
+    'box-shadow-size',
+    'translate-x-unitinput',
+    'translate-y-unitinput',
+    'translate-z-unitinput',
+    'sp-blur-radius',
+    'variable-size-input'
+];
+
+function isAllowedInput(target) {
+    if (target.getAttribute('data-wf-text-input') !== 'true') return false;
+
+    const name = target.getAttribute('name');
+    const automationId = target.getAttribute('data-automation-id');
+
+    return ALLOWED_STYLE_INPUT_NAMES.includes(name) ||
+        ALLOWED_STYLE_INPUT_NAMES.includes(automationId);
+}
+
 document.addEventListener('keydown', (event) => {
     // 1. Safety Check: If the extension context is invalidated, stop execution 
     // to prevent "Extension context invalidated" errors.
@@ -12,29 +62,7 @@ document.addEventListener('keydown', (event) => {
     const target = event.target;
     if (target.tagName !== 'INPUT') return;
 
-    // EXCEPTION 1: Don't run in the "Custom properties" section (Style Tab).
-    const inputType = target.getAttribute('data-input-type');
-    if (inputType === 'declaration-property' || inputType === 'declaration-value') {
-        return;
-    }
-
-    // EXCEPTION 2: Don't run in Settings, Interactions, or custom attributes panels.
-    if (target.closest('[data-automation-id="right-sidebar-settings-tab"]') ||
-        target.closest('[data-automation-id="right-sidebar-interactions-tab"]') ||
-        target.closest('[data-automation-id="custom-attributes-settings"]')) {
-        return;
-    }
-
-    // EXCEPTION 3: Don't run in the Finder (Global Search bar).
-    // Webflow uses data-automation-id="finder-search-input" for the global search.
-    if (target.getAttribute('data-automation-id') === 'finder-search-input') {
-        return;
-    }
-
-    // EXCEPTION 4: Don't run in the Pages panel search (left sidebar).
-    if (target.closest('[data-automation-id="pages-search-input-container"]')) {
-        return;
-    }
+    if (!isAllowedInput(target)) return;
 
     const value = target.value.trim();
 
